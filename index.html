@@ -1,158 +1,219 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>許書瑀的個人網站 | 資訊科學系</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>許書瑀的個人網站 | 資訊科學系</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    body { font-family: 'Noto Sans TC', sans-serif; background: #f0f2f5; }
+    main { padding-top: 5rem; }
+    article { background:#fff; border-radius:12px; box-shadow:0 6px 12px rgba(0,0,0,0.08); padding:2rem; margin-bottom:2rem; }
+    h1,h2 { font-weight:800; }
+    h1 { color:#1f2871; }
+    h2 { color:#102186; }
+    .table thead { background-color:#0e2b48; color:white; }
+    .table tbody td { background-color:#f1f6fb; }
+    .info-card { background-color:#f8f9fa; border-left:5px solid #46A3FF; }
 
-    <style>
-        main { padding-top: 5rem; }
-        article { padding-top: 2rem; padding-bottom: 2rem; }
-        .table thead { background-color: #0e2b48; color: rgb(255, 255, 255); }
-        .info-card { background-color: #f8f9fa; border-left: 5px solid #46A3FF; }
-        h1 {
-        color:#1f2871;
-        font-weight:800;
-        }
-        h2 {
-        color:#102186;
-        font-weight:800;
-        }
-        #home {
-            background-image: url('assets/images/bg.jpg');
-            background-size: cover;
-            background-position: center;
-            color: white;
-        }
-        #home h1,
-        #home p {
-            color: white;
-            text-shadow: 0 2px 6px rgba(0,0,0,0.6);
-        }
-        
-    </style>
+    .navbar-nav .nav-link { transition: color 0.3s; }
+    .navbar-nav .nav-link:hover { color: #46A3FF; }
+
+    .game-frame { border: 3px solid #667eea; border-radius: 16px; padding:16px; background-color:#f9f9ff; box-shadow:0 8px 20px rgba(0,0,0,0.15); }
+
+    .game-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; max-width:600px; margin:0 auto; perspective:1000px; }
+    .card { background-color:transparent; aspect-ratio:3/4; cursor:pointer; position:relative; transform-style:preserve-3d; transition: transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275); }
+    .card.flipped { transform:rotateY(180deg); cursor:default; }
+    .card.matched { transform:rotateY(180deg); opacity:1; cursor:default; animation:pulse 0.5s; }
+    .card.matched .card-back { border-color:#4ade80; box-shadow:0 0 10px rgba(74,222,128,0.5); }
+    .card-face { position:absolute; width:100%; height:100%; border-radius:12px; backface-visibility:hidden; display:flex; align-items:center; justify-content:center; font-size:2.5rem; box-shadow:0 4px 12px rgba(0,0,0,0.15); }
+    .card-front { background: linear-gradient(45deg, #667eea, #764ba2); transform:rotateY(0deg); border:2px solid #fff; }
+    .card-front::after { content:'?'; color:rgba(255,255,255,0.3); font-size:2rem; font-weight:bold; }
+    .card-back { background-color:white; transform:rotateY(180deg); border:2px solid #667eea; }
+    @keyframes pulse { 0% { transform:rotateY(180deg) scale(1);} 50% { transform:rotateY(180deg) scale(1.1);} 100% { transform:rotateY(180deg) scale(1); } }
+
+    .watermark { position:fixed; top:10px; right:15px; font-size:1rem; color: rgba(0,0,0,0.1); font-weight:bold; z-index:50; pointer-events:none; transform: rotate(-10deg); }
+    #home {
+        background-image: url('assets/images/bg.jpg');
+        background-size: cover;
+        background-position: center;
+        color: white;
+    }
+</style>
 </head>
-
 <body>
+  
 
 <header>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
-  <div class="container">
-    <a class="navbar-brand fw-bold" href="#home">許書瑀 | 個人網站</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="#home">🏠首頁</a></li>
-        <li class="nav-item"><a class="nav-link" href="#about">⭐️關於我</a></li>
-        <li class="nav-item"><a class="nav-link" href="#portfolio">✨專案/作品集</a></li>
-        <li class="nav-item"><a class="nav-link" href="#others">🗒️其他資訊</a></li>
-        <li class="nav-item"><a class="nav-link" href="#contact">📞聯絡我</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
+<div class="container">
+<a class="navbar-brand fw-bold" href="#home">許書瑀 | 個人網站</a>
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+<div class="collapse navbar-collapse" id="navbarNav">
+<ul class="navbar-nav ms-auto">
+<li class="nav-item"><a class="nav-link" href="#home">🏠首頁</a></li>
+<li class="nav-item"><a class="nav-link" href="#about">⭐️關於我</a></li>
+<li class="nav-item"><a class="nav-link" href="#portfolio">✨專案/作品集</a></li>
+<li class="nav-item"><a class="nav-link" href="#others">🗒️其他資訊</a></li>
+<li class="nav-item"><a class="nav-link" href="#contact">📞聯絡我</a></li>
+</ul>
+</div></div></nav>
 </header>
 
-<main class="container">
+<div class="watermark">許書瑀</div>
 
+<main class="container">
 <article id="home" class="text-center py-5 rounded shadow-sm my-4">
-  <h2 class="display-5">歡迎來到許書瑀的個人網站</h2>
-  <p class="lead">在此分享我在學習與生活中的點滴。</p>
+<h2 class="display-5">歡迎來到許書瑀的個人網站</h2>
+<p class="lead">在此分享我在學習與生活中的點滴</p>
 </article>
 
 <article id="about">
 <h2 class="border-bottom pb-2 mb-4">⭐️關於我</h2>
-
 <div class="row">
-<div class="col-md-4 mb-4 text-center">
-  <img src="assets/images/111316011photo.jpg"
-       class="img-fluid rounded-circle mb-3"
-       style="width:180px;height:180px;object-fit:cover;"
-       alt="許書瑀">
-  <h3>許書瑀</h3>
-  <p><a href="https://www.ntue.edu.tw/">國立臺北教育大學</a> 資訊科學系</p>
-
-  <div class="info-card p-3 mt-3 text-start">
-    <p class="mb-1">生日：2006/08/07</p>
-    <p class="mb-0">MBTI：ISFP</p>
-  </div>
+<div class="col-md-4 mb-4 d-flex flex-column align-items-center text-center">
+    <img src="assets/images/111316011photo.jpg" class="img-fluid rounded-circle mb-3" style="width:180px;height:180px;object-fit:cover;" alt="許書瑀">
+    <h3>許書瑀</h3>
+    <p><a href="https://www.ntue.edu.tw/">國立臺北教育大學</a> 資訊科學系</p>
+    <div class="info-card p-3 text-center mt-3" style="width:100%;">
+        <p class="mb-1">生日：2006/08/07</p>
+        <p class="mb-0">MBTI：ISFP</p>
+    </div>
 </div>
 
+</div>
 <div class="col-md-8">
-  <p class="fs-5">
-    我是一位就讀於 <mark>國立臺北教育大學資訊科學系</mark> 的大學生，
-    興趣為 <mark>音樂</mark> 與 <mark>羽毛球</mark>，並加入了學校的<mark>餘韻吉他社</mark>，拓展社交同時學習和體驗新的事物。</p>
-
-  <table class="table table-bordered">
-    <thead>
-      <tr><th>期間</th><th>學校</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>2021-2024</td><td>臺北市立松山高中</td></tr>
-      <tr><td>2024-</td><td>國立臺北教育大學</td></tr>
-    </tbody>
-  </table>
+<p class="fs-5">
+我是一位就讀於 <mark>國立臺北教育大學資訊科學系</mark> 的大學生，
+興趣為 <mark>音樂</mark> 與 <mark>羽毛球</mark>，
+並加入了學校的<mark>餘韻吉他社</mark>，拓展社交同時學習和體驗新的事物。</p>
+</p>
+<table class="table table-bordered">
+<thead><tr><th>期間</th><th>學校</th></tr></thead>
+<tbody>
+<tr><td>2021 - 2024</td><td>臺北市立松山高中</td></tr>
+<tr><td>2024 -</td><td>國立臺北教育大學</td></tr>
+</tbody>
+</table>
 </div>
 </div>
 </article>
-
-<hr>
 
 <article id="portfolio">
-<h2 class="border-bottom pb-2 mb-4">✨專案 / 作品集</h2>
+<h2 class="border-bottom pb-2 mb-4">✨專案/作品集</h2>
+
+<div class="mb-5 p-4 bg-white rounded-xl shadow-lg">
+<h5 class="mb-3 font-bold">🎵音樂作品</h5>
+<audio controls class="w-100 mb-3"><source src="assets/audio/Shattered Silence.mp3" type="audio/mpeg"></audio>
+</div>
+
+<div class="mb-5 p-4 bg-white rounded-xl shadow-lg">
+<h5 class="mb-3 font-bold">🎬影片作品</h5>
+<video controls class="w-100 mb-3"><source src="assets/video/111316011video.mp4" type="video/mp4"></video>
+</div>
+
+<div class="mb-5 p-4 bg-white rounded-xl shadow-lg">
+<h5 class="mb-3 font-bold">🌐AI影片創作分享</h5>
+<div class="ratio ratio-16x9">
+<iframe src="https://www.youtube.com/embed/q8MhB8JQxbI" title="影片創作分享" allowfullscreen></iframe>
+</div>
+</div>
 
 
-
-<h4>🎵音樂作品</h4>
-<audio controls class="w-100">
-  <source src="assets/audio/Shattered Silence.mp3" type="audio/mpeg">
-</audio>
-
-<h4 class="mt-4">🎬影片作品</h4>
-<video controls style="max-width: 600px; width: 100%; height: auto;" class="mx-auto d-block">
-  <source src="assets/video/111316011video.mp4" type="video/mp4">
-</video>
+<div class="mb-5 p-4 bg-white rounded-xl shadow-lg">
+<h5 class="mb-3 font-bold">🎮網頁遊戲作品</h5>
+<div class="game-frame mb-3 p-3">
+<div id="game-container" class="flex flex-col items-center">
+<div class="flex justify-between w-full max-w-[600px] mb-4 p-4 rounded-xl shadow-md text-slate-700 font-bold">
+<div class="flex items-center gap-2"><span>⏳</span> <span id="time">00:00</span></div>
+<div class="text-xl text-purple-600">記憶翻牌</div>
+<div class="flex items-center gap-2"><span>👣</span> <span id="moves">0</span></div>
+</div>
+<div class="game-grid w-full max-w-[600px]" id="game-board"></div>
+<button onclick="restartGame()" class="mt-6 px-6 py-2 bg-purple-500 text-white font-bold rounded-full shadow-lg hover:bg-purple-600 transition-all active:scale-95 flex items-center gap-2">
+<span>🔄</span> 重新開始
+</button>
+</div>
+</div>
+</div>
 </article>
-
-<hr>
 
 <article id="others">
 <h2 class="border-bottom pb-2 mb-4">🗒️其他資訊</h2>
-
-<div class="row justify-content-center">
-  <div class="col-md-4 text-center mb-3">
-    <img src="assets/images/111316011photo-3.jpg" class="img-fluid rounded">
-    <p class="mt-2">大一成發</p>
-  </div>
-  <div class="col-md-4 text-center mb-3">
-    <img src="assets/images/111316011photo-2.jpg" class="img-fluid rounded">
-    <p class="mt-2">大二成發</p>
-  </div>
+<div class="row justify-content-center text-center">
+<div class="col-md-4 mb-4"><img src="assets/images/111316011photo-3.jpg" class="img-fluid rounded"><p class="mt-2">大一成發</p></div>
+<div class="col-md-4 mb-4"><img src="assets/images/111316011photo-2.jpg" class="img-fluid rounded"><p class="mt-2">大二成發</p></div>
 </div>
 </article>
-
-<hr>
 
 <article id="contact">
 <h2 class="border-bottom pb-2 mb-4">📞聯絡我</h2>
 <p>Email：<a href="mailto:s111316011@stu.ntue.edu.tw">s111316011@stu.ntue.edu.tw</a></p>
-</article>
-</div>
 <div class="col-md-6 mb-4">
 <h3>🏫學校位置</h3>
 <div class="ratio ratio-16x9">
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3615.2784024338266!2d121.54206247541927!3d25.02462437782254!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a908a8232611%3A0xeebfb2d71a5025c7!2z5ZyL56uL6Ie65YyX5pWZ6IKy5aSn5a24!5e0!3m2!1szh-TW!2stw!4v1731827435609!5m2!1szh-TW!2stw" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="border rounded shadow-sm"></iframe>
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3615.2784024338266!2d121.54206247541927!3d25.02462437782254!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a908a8232611%3A0xeebfb2d71a5025c7!2z5ZyL56uL6Ie65YyX5pWZ6IKy5aSn5a24!5e0!3m2!1szh-TW!2stw!4v1731827435609!5m2!1szh-TW!2stw" allowfullscreen="" loading="lazy" class="border rounded shadow-sm"></iframe>
 </div>
+</div>
+</article>
+
 </main>
 
 <footer class="bg-dark text-white text-center py-3">
 <p class="mb-1">© 2025 許書瑀 個人網站。版權所有。</p>
-<p class="mb-0"><small>最後更新日期：<time datetime="2025-12-15">2025年12月15日</time></small></p>
+<p class="mb-0"><small>最後更新日期：<time datetime="2025-12-20">2025年12月20日</time></small></p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+const gameBoard = document.getElementById('game-board');
+const movesDisplay = document.getElementById('moves');
+const timeDisplay = document.getElementById('time');
+const victoryModal = document.getElementById('victory-modal');
+const finalTimeDisplay = document.getElementById('final-time');
+const finalMovesDisplay = document.getElementById('final-moves');
+
+const emojis = ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼'];
+let hasFlippedCard=false,lockBoard=false,firstCard,secondCard,moves=0,matchesFound=0,timer=null,seconds=0,isGameActive=false;
+
+function initGame(){
+    const gameEmojis=[...emojis,...emojis]; shuffle(gameEmojis);
+    gameBoard.innerHTML=''; gameEmojis.forEach(e=>gameBoard.appendChild(createCard(e)));
+    moves=0; matchesFound=0; seconds=0; movesDisplay.innerText='0'; timeDisplay.innerText='00:00'; isGameActive=false;
+    stopTimer(); resetBoard();
+}
+
+function createCard(e){
+    const c=document.createElement('div'); c.classList.add('card'); c.dataset.emoji=e;
+    const f=document.createElement('div'); f.classList.add('card-face','card-front');
+    const b=document.createElement('div'); b.classList.add('card-face','card-back'); b.innerText=e;
+    c.appendChild(f); c.appendChild(b); c.addEventListener('click',flipCard); return c;
+}
+
+function flipCard(){
+    if(lockBoard) return; if(this===firstCard) return;
+    if(!isGameActive){isGameActive=true;startTimer();}
+    this.classList.add('flipped');
+    if(!hasFlippedCard){hasFlippedCard=true;firstCard=this; return;}
+    secondCard=this; incrementMoves(); checkForMatch();
+}
+
+function checkForMatch(){let m=firstCard.dataset.emoji===secondCard.dataset.emoji; m?disableCards():unflipCards();}
+function disableCards(){firstCard.classList.add('matched');secondCard.classList.add('matched');
+firstCard.removeEventListener('click',flipCard);secondCard.removeEventListener('click',flipCard);
+matchesFound++; resetBoard(); if(matchesFound===emojis.length) setTimeout(gameWin,500);}
+function unflipCards(){lockBoard=true; setTimeout(()=>{firstCard.classList.remove('flipped'); secondCard.classList.remove('flipped'); resetBoard();},1000);}
+function resetBoard(){[hasFlippedCard,lockBoard]=[false,false]; [firstCard,secondCard]=[null,null];}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+function incrementMoves(){moves++; movesDisplay.innerText=moves;}
+function startTimer(){stopTimer(); timer=setInterval(()=>{seconds++; let m=Math.floor(seconds/60).toString().padStart(2,'0'); let s=(seconds%60).toString().padStart(2,'0'); timeDisplay.innerText=`${m}:${s}`;},1000);}
+function stopTimer(){if(timer) clearInterval(timer);}
+function gameWin(){stopTimer(); alert(`恭喜過關！時間：${timeDisplay.innerText} 步數：${moves}`);}
+function restartGame(){initGame();}
+initGame();
+</script>
+
 </body>
 </html>
